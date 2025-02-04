@@ -8,8 +8,8 @@
 <body>
 
     <model-viewer
-              src="../../assets/box.glb"
-              ios-src="../../assets/box.usdz"
+              src="/assets/box.glb"
+              ios-src="/assets/box.usdz"
               alt="3D model couldnt be displayed"
               camera-controls shadow-intensity="1"
               environment-image="https://modelviewer.dev/shared-assets/environments/aircraft_workshop_01_1k.hdr"
@@ -54,7 +54,7 @@
     window.$MediaActive = null; // Initialize as null
     window.playAudio = (element, name) =>
     {
-        var music = new Audio("../../assets/"+name);
+        var music = new Audio("/assets/"+name);
         if(window.$MediaActive && window.$MediaActive !== music) {window.$MediaActive.pause(); }
         music.play();
         window.$MediaActive = music;
@@ -65,7 +65,7 @@
     const modelViewer = document.querySelector("model-viewer");
   
     window.switchSrc = (element, name) => {
-      const base = "../../assets/" + name;
+      const base = "/assets/" + name;
       modelViewer.src = base + '.glb';
       modelViewer.poster = base + '.webp';
       const slides = document.querySelectorAll(".slide");
