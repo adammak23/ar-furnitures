@@ -18,13 +18,13 @@
 -->
 <body>
     <model-viewer
-              src="/model-viewer-test/assets/wegovy.glb"
-              ios-src="/model-viewer-test/assets/wegovy.usdz"
+              src="/assets/wegovy.glb"
+              ios-src="/assets/wegovy.usdz"
               alt="3D model couldnt be displayed"
               shadow-intensity="1"
               
-              environment-image="https://modelviewer.dev/shared-assets/environments/aircraft_workshop_01_1k.hdr"
-              exposure="1"
+              environment-image="/assets/hdri.jpg"
+              exposure="1.2"
               ar-modes="scene-viewer webxr quick-look"
               ar
               camera-controls
@@ -57,7 +57,7 @@
             </div>
             
             <button id="ar-failure">
-                AR is not tracking!
+                AR Error!
             </button>
 
             <div class="container">
@@ -137,12 +137,20 @@
       container.classList.remove('fade-in');
       container.classList.add('fade-out');
 
+      let homeBtn = document.querySelector('.home-button');
+      homeBtn.classList.remove('fade-out');
+      homeBtn.classList.add('fade-in');
+
       timeoutID = self.setTimeout(()=>
       {
         modelViewer.pause();
         let container = document.querySelector('.container');
         container.classList.remove('fade-out');
         container.classList.add('fade-in');
+
+        let homeBtn = document.querySelector('.home-button');
+        homeBtn.classList.remove('fade-in');
+        homeBtn.classList.add('fade-out');
       }, animLength);
     };
 
@@ -153,6 +161,10 @@
         let container = document.querySelector('.container');
         container.classList.remove('fade-out');
         container.classList.add('fade-in');
+
+        let homeBtn = document.querySelector('.home-button');
+        homeBtn.classList.remove('fade-in');
+        homeBtn.classList.add('fade-out');
 
         const modelViewer = document.querySelector("model-viewer");
         modelViewer.currentTime = 48/24;
@@ -168,10 +180,14 @@
     modelViewer.addEventListener('model-visibility', function(evt)
     {
       const modelViewer = document.querySelector("model-viewer");
-
       modelViewer.play();
       modelViewer.currentTime = 48/24;
       modelViewer.pause();
+
+      let homeBtn = document.querySelector('.home-button');
+      homeBtn.classList.remove('fade-in');
+      homeBtn.classList.add('fade-out');
+      
     })
   }
   window.onload = executeOnStartup;
@@ -223,10 +239,11 @@
             background-color: white;
             border: 2px solid #001956;
             border-radius: 0px;
-            margin: 5px auto;
+            margin: 5px 5px;
             text-align: center;
             width: fit-content;
-            padding-inline: 15px;            
+            padding-inline: 15px;
+                    
         }
 
         .header-box
