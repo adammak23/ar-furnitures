@@ -16,8 +16,8 @@ ar-modes="scene-viewer webxr quick-look"
 -->
 <body>
     <model-viewer
-              src="/assets/wegovy.glb"
-              ios-src="/assets/wegovy.usdz"
+              src="/model-viewer-test/assets/wegovy.glb"
+              ios-src="/model-viewer-test/assets/wegovy.usdz"
               alt="3D model couldnt be displayed"
               shadow-intensity="1"              
               environment-image="/assets/hdri.jpg"
@@ -44,7 +44,7 @@ ar-modes="scene-viewer webxr quick-look"
 
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
 
-            <a class="home-button" onclick="home()">
+            <a class="home-button fade-out" onclick="home()">
               <i class="fas fa-home"></i> Home
             </a>
 
@@ -178,12 +178,7 @@ ar-modes="scene-viewer webxr quick-look"
       const modelViewer = document.querySelector("model-viewer");
       modelViewer.play();
       modelViewer.currentTime = 48/24;
-      modelViewer.pause();
-
-      let homeBtn = document.querySelector('.home-button');
-      homeBtn.classList.remove('fade-in');
-      homeBtn.classList.add('fade-out');
-      
+      modelViewer.pause();      
     })
   }
   window.onload = executeOnStartup;
