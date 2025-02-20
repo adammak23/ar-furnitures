@@ -51,12 +51,20 @@
   const modelViewer = document.querySelector("model-viewer");
   const selectModel = document.querySelector('#model-dropdown');
 
+  // Determine the base path dynamically
+  const basePath = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+    ? '/assets/'
+    : '/ar-furnitures/assets/';
+
+  console.log("1 Hostname: " + window.location.hostname);
+  console.log("2 Base Path: " + basePath);
+
   window.onload = () =>
   {
     selectModel.replaceChildren();
     AddNewModelOption("sofa_0", "Sofa");
     AddNewModelOption("MaterialsVariantsShoe", "Shoe");
-    console.log("location.hostname: "+ window.location.hostname);
+    console.log("3 location.hostname: "+ window.location.hostname);
     switchSrc("sofa_0");
   }
 
@@ -73,11 +81,6 @@
   {
     switchSrc(event.target.value);
   });
-
-    // Determine the base path dynamically
-    const basePath = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
-    ? '/assets/'
-    : '/ar-furnitures/assets/';
 
     window.switchSrc = (name) =>
     {
