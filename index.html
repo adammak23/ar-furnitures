@@ -56,6 +56,7 @@
     selectModel.replaceChildren();
     AddNewModelOption("sofa_0", "Sofa");
     AddNewModelOption("MaterialsVariantsShoe", "Shoe");
+    console.log("location.hostname: "+ window.location.hostname);
   }
 
   window.AddNewModelOption = (element, name) =>
@@ -72,9 +73,14 @@
     switchSrc(event.target.value);
   });
 
+    // Determine the base path dynamically
+    const basePath = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+    ? '/assets/'
+    : '/ar-furnitures/assets/';
+
     window.switchSrc = (name) =>
     {
-      const base = "/assets/" + name;
+      const base = basePath + name;
       modelViewer.src = base + '.glb';
       modelViewer.poster = base + '.webp';
       const slides = document.querySelectorAll(".slide");
