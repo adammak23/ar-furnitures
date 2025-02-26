@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>AR Furnitures Sketchfab API</title>
+  <link rel="stylesheet" href="test.css">
+</head>
+
+<body>
+    
+    <div class="dropdown-container">
+        <label for="model-dropdown">Select Model: </label>
+        <select id="model-dropdown">
+            <option value="">Choose a model...</option>
+            <option value="model1">Leather Sofa</option>
+            <option value="model2">Red Sofa</option>
+            <option value="model3">Sofa 48</option>
+        </select>
+    </div>
+
+    <div class="sketchfab-embed-wrapper">
+        <iframe id="sketchfab-iframe"
+        frameborder="0"
+        allowfullscreen mozallowfullscreen="true"
+        webkitallowfullscreen="true"
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        xr-spatial-tracking
+        execution-while-out-of-viewport
+        execution-while-not-rendered web-share src="https://sketchfab.com/models/c5803a367d3f4724931c5652b266b664/embed">
+    </iframe>
+    </div>
+
+    <script>
+        // Dictionary of model IDs and their corresponding Sketchfab URLs
+        const modelUrls = {
+            'model1': 'https://sketchfab.com/models/c5803a367d3f4724931c5652b266b664/embed',
+            'model2': 'https://sketchfab.com/models/7ef0d9d98ec0437bbbfe352ed9e0e707/embed',
+            'model3': 'https://sketchfab.com/models/fcf3d141539245969e78026f2d70d6f3/embed'
+        };
+
+        // Get the dropdown and iframe elements
+        const dropdown = document.getElementById('model-dropdown');
+        const iframe = document.getElementById('sketchfab-iframe');
+
+        // Add event listener for dropdown changes
+        dropdown.addEventListener('change', function() {
+            const selectedValue = this.value;
+            if (selectedValue && modelUrls[selectedValue]) {
+                iframe.src = modelUrls[selectedValue];
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .sketchfab-embed-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .sketchfab-embed-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    .dropdown-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+</style>
