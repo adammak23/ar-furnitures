@@ -1,25 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8" />
   <title>AR Furnitures</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <link rel="stylesheet" href="test.css">
+
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.1/dist/es-module-shims.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@^0.169.0/build/three.module.min.js"
+      }
+    }
+    </script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer-module.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer-effects/dist/model-viewer-effects.min.js"></script>
 </head>
 <body>
 
   <model-viewer
-    
     alt="3D model couldn't be displayed"
     camera-controls shadow-intensity="1"
-    environment-image="https://modelviewer.dev/shared-assets/environments/aircraft_workshop_01_1k.hdr"
-    exposure="0.75"
+    environment-image="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr"
+    skybox-image="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr"
+    exposure="1"
     ar-modes="scene-viewer webxr quick-look"
     ar
+    shadow-intensity="1"
+    shadow-softness="0.5"
     auto-rotate
     camera-controls
-    disable-tap
+    
+    min-field-of-view='2deg'
+    max-field-of-view='30deg'
     style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; border: none;">
     
+    <effect-composer render-mode="quality">
+      <outline-effect color="blue" blend-mode="skip"></outline-effect>
+      <ssao-effect blend-mode="default" strength="4" opacity="0.9"></ssao-effect>
+      <glitch-effect blend-mode="skip" mode="constant"></glitch-effect>
+      <smaa-effect blend-mode="default" quality="medium"></smaa-effect>
+      <bloom-effect blend-mode="skip" strength="0.5"></bloom-effect>
+      <pixelate-effect granularity="5" blend-mode="skip"></pixelate-effect>
+      <color-grade-effect blend-mode="default"></color-grade-effect>
+    </effect-composer>
+
     <div class="progress-bar hide" slot="progress-bar">
       <div class="update-bar"></div>
     </div>
@@ -42,32 +67,43 @@
     <div>
       <div>Variant: <select id="variant-dropdown"></select></div>
     </div>
+
+    <div>
+      <div>Environment: <select id="enviro-dropdown"></select></div>
+    </div>
+
   </div>
-    
   </model-viewer>
 
   <script type="module">
 
   const modelViewer = document.querySelector("model-viewer");
   const selectModel = document.querySelector('#model-dropdown');
+  const selectEnviro = document.querySelector('#enviro-dropdown');
 
   // Determine the base path dynamically
   const basePath = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
     ? '/assets/'
     : '/ar-furnitures/assets/';
 
-  console.log("1 Hostname: " + window.location.hostname);
-  console.log("2 Base Path: " + basePath);
-
   window.onload = () =>
   {
     selectModel.replaceChildren();
     AddNewModelOption("sofa_0", "Sofa");
     AddNewModelOption("MaterialsVariantsShoe", "Shoe");
-    console.log("3 location.hostname: "+ window.location.hostname);
     switchSrc("sofa_0");
+    //modelViewer.environmentImage = basePath + 'hdri.jpg';
+    
+    selectEnviro.replaceChildren();
+    AddNewEnviro("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr", "small studio");
+    AddNewEnviro("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/empty_play_room_1k.hdr", "play_room");  
+    AddNewEnviro("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/brown_photostudio_02_1k.hdr", "photostudio");
+    AddNewEnviro("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/blue_photo_studio_1k.hdr", "blue studio");
+    AddNewEnviro("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/small_empty_room_3_1k.hdr", "small empty room");  
+    AddNewEnviro("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/pine_attic_1k.hdr", "pine attic");  
   }
 
+  //#region Model Dropdown
   window.AddNewModelOption = (element, name) =>
   {
     const modelOption = document.createElement('option');
@@ -76,21 +112,18 @@
     
     selectModel.appendChild(modelOption);
   }
-
   selectModel.addEventListener('input', (event) =>
   {
     switchSrc(event.target.value);
   });
-
-    window.switchSrc = (name) =>
-    {
-      const base = basePath + name;
-      modelViewer.src = base + '.glb';
-      modelViewer.poster = base + '.webp';
-      const slides = document.querySelectorAll(".slide");
-    };
-
-    window.switchSrcFromDropdown = () =>
+  window.switchSrc = (name) =>
+  {
+    const base = basePath + name;
+    modelViewer.src = base + '.glb';
+    //modelViewer.poster = base + '.webp';
+    const slides = document.querySelectorAll(".slide");
+  };
+  window.switchSrcFromDropdown = () =>
     {
       const dropdown = document.getElementById('model-dropdown');
       const selectedModel = dropdown.value;
@@ -99,9 +132,30 @@
         switchSrc(selectedModel);
       }
     };
-  </script>
+  //#endregion
 
-<script>
+  //#region Environment Dropdown
+  window.AddNewEnviro = (element, name) =>
+  {
+    const enviroOption = document.createElement('option');
+    enviroOption.value = element;
+    enviroOption.textContent = name;
+    
+    selectEnviro.appendChild(enviroOption);
+  }
+  selectEnviro.addEventListener('input', (event) =>
+  {
+    switchEnviro(event.target.value);
+  });
+  window.switchEnviro = (name) =>
+  {
+    modelViewer.environmentImage = name;
+    modelViewer.skyboxImage = name;
+  };
+  //#endregion
+
+
+//#region Variant Dropdown
   const modelViewerVariants = document.querySelector("model-viewer");
   const select = document.querySelector('#variant-dropdown');
   
@@ -118,11 +172,12 @@
     }
 });
 
-
   select.addEventListener('input', (event) =>
   {
     modelViewerVariants.variantName = event.target.value === 'default' ? null : event.target.value;
   });
+//#endregion
+
 </script>
 
   <style>
